@@ -1,0 +1,4 @@
+**/*.iml
+.idea
+iac/.terraform
+rest-api/target
