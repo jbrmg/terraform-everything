@@ -2,7 +2,7 @@ terraform {
   required_providers {
     everything = {
       source  = "qaware.com/terraform/everything"
-      version = "~> 0.0.1"
+      version = "0.0.1"
     }
   }
 
