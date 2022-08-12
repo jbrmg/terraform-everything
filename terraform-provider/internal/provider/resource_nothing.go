@@ -47,7 +47,7 @@ func resourceNothingCreate(ctx context.Context, d *schema.ResourceData, meta int
 	nothing, err := getClient(meta).CreateNothing(something, anything)
 
 	if err != nil {
-		return diag.Errorf("Could not create nothing: %w", err)
+		return diag.Errorf("Could not create nothing: %s", err)
 	}
 
 	d.SetId(nothing.Id)
@@ -64,7 +64,7 @@ func resourceNothingRead(_ context.Context, d *schema.ResourceData, meta interfa
 	nothing, err := getClient(meta).GetNothing(id)
 
 	if err != nil {
-		return diag.Errorf("could not fetch nothing details: %w", err)
+		return diag.Errorf("could not fetch nothing details: %s", err)
 	}
 
 	if nothing == nil {
@@ -85,13 +85,13 @@ func resourceNothingUpdate(ctx context.Context, d *schema.ResourceData, meta int
 	nothing, err := getClient(meta).UpdateNothing(id, something, anything)
 
 	if err != nil {
-		return diag.Errorf("could not update nothing details: %w", err)
+		return diag.Errorf("could not update nothing details: %s", err)
 	}
 
 	d.Set("something", nothing.Something)
 	d.Set("anything", nothing.Anything)
 
-	tflog.Trace(ctx, fmt.Sprintf("Updated nothing: %w", nothing))
+	tflog.Trace(ctx, fmt.Sprintf("Updated nothing: %s", nothing))
 
 	return nil
 }
