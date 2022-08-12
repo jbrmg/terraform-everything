@@ -7,8 +7,6 @@ import (
 )
 
 type ApiClient struct {
-	Username string
-	Password string
 }
 
 const NothingApi = "nothings/%s"
@@ -90,5 +88,5 @@ func (a *ApiClient) DeleteNothing(id string) error {
 }
 
 func (a *ApiClient) newClient() *sling.Sling {
-	return sling.New().Base("http://localhost:8080/").SetBasicAuth(a.Username, a.Password)
+	return sling.New().Base("http://localhost:8080/")
 }
