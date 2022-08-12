@@ -12,4 +12,6 @@ terraform {
 }
 
 provider everything {
+  username = "nobody"
+  password = "password"
 }
