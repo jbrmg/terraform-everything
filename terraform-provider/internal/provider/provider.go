@@ -15,7 +15,11 @@ func init() {
 
 func New() func() *schema.Provider {
 	return func() *schema.Provider {
-		p := &schema.Provider{}
+		p := &schema.Provider{
+			ResourcesMap: map[string]*schema.Resource{
+				"everything_nothing": resourceNothing(),
+			},
+		}
 
 		p.ConfigureContextFunc = providerConfigure
 		return p
