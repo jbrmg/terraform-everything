@@ -19,6 +19,9 @@ func New() func() *schema.Provider {
 			ResourcesMap: map[string]*schema.Resource{
 				"everything_nothing": resourceNothing(),
 			},
+			DataSourcesMap: map[string]*schema.Resource{
+				"everything_nothing": dataSourceNothing(),
+			},
 			Schema: map[string]*schema.Schema{
 				"username": {
 					Description: "Username for basic auth authentication",
