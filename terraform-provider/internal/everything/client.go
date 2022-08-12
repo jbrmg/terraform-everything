@@ -27,7 +27,7 @@ func (a *ApiClient) CreateNothing(something string, anything string) (*Nothing, 
 	requestBody := nothingRequest{Something: something, Anything: anything}
 
 	nothing := new(Nothing)
-	_, err := a.newClient().
+	resp, err := a.newClient().
 		Post(NothingsApi).
 		BodyJSON(requestBody).
 		Add("Accept", "application/json").
@@ -35,6 +35,10 @@ func (a *ApiClient) CreateNothing(something string, anything string) (*Nothing, 
 
 	if err != nil {
 		return nil, err
+	}
+
+	if resp.StatusCode != 201 {
+		return nil, fmt.Errorf("got invalid response code: %d", resp.StatusCode)
 	}
 
 	return nothing, nil
@@ -47,12 +51,16 @@ func (a *ApiClient) GetNothing(id string) (*Nothing, error) {
 		Add("Accept", "application/json").
 		ReceiveSuccess(nothing)
 
+	if err != nil {
+		return nil, errors.New(fmt.Sprintf("could not nothing details. %#v", err))
+	}
+
 	if resp.StatusCode == 404 {
 		return nil, nil
 	}
 
-	if err != nil {
-		return nil, errors.New(fmt.Sprintf("could not nothing details. %#v", err))
+	if resp.StatusCode != 200 {
+		return nil, fmt.Errorf("got invalid response code: %d", resp.StatusCode)
 	}
 
 	return nothing, nil
@@ -62,7 +70,7 @@ func (a *ApiClient) UpdateNothing(id string, something string, anything string) 
 	requestBody := nothingRequest{Something: something, Anything: anything}
 
 	nothing := new(Nothing)
-	_, err := a.newClient().
+	resp, err := a.newClient().
 		Put(fmt.Sprintf(NothingApi, id)).
 		BodyJSON(requestBody).
 		Add("Accept", "application/json").
@@ -72,16 +80,24 @@ func (a *ApiClient) UpdateNothing(id string, something string, anything string) 
 		return nil, err
 	}
 
+	if resp.StatusCode != 200 {
+		return nil, fmt.Errorf("got invalid response code: %d", resp.StatusCode)
+	}
+
 	return nothing, nil
 }
 
 func (a *ApiClient) DeleteNothing(id string) error {
-	_, err := a.newClient().
+	resp, err := a.newClient().
 		Delete(fmt.Sprintf(NothingApi, id)).
 		ReceiveSuccess(nil)
 
 	if err != nil {
 		return err
+	}
+
+	if resp.StatusCode != 204 {
+		return fmt.Errorf("got invalid response code: %d", resp.StatusCode)
 	}
 
 	return nil
