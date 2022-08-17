@@ -1,9 +1,9 @@
 package provider
 
 import (
-	"terraform-provider-everything/internal/everything"
+	"terraform-provider-everything/internal/ikea"
 )
 
-func getClient(meta interface{}) *everything.ApiClient {
-	return meta.(*everything.ApiClient)
+func getClient(meta interface{}) *ikea.ApiClient {
+	return meta.(*ikea.ApiClient)
 }

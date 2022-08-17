@@ -5,3 +5,8 @@ spring.datasource.password: password
 spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
 spring.jpa.show-sql: true
 spring.jpa.properties.hibernate.format_sql: true
+spring:
+  data:
+    rest:
+      return-body-on-create: true
+      return-body-on-update: true

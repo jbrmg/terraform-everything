@@ -25,7 +25,7 @@ func main() {
 
 	opts := &plugin.ServeOpts{
 		Debug:        debugMode,
-		ProviderAddr: "qaware.com/terraform/everything",
+		ProviderAddr: "qaware.com/terraform/ikea",
 		ProviderFunc: provider.New(),
 	}
 

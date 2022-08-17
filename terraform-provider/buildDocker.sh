@@ -1,6 +1,6 @@
 #!/bin/bash
 version=$1
-imageName=qaware.com/terraform/everything
+imageName=qaware.com/terraform/ikea
 
 if [ "$1" = "" ]; then
   echo "Version number must not be empty. Please provide version number in format 1.2.3 as argument."

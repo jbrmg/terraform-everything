@@ -4,13 +4,13 @@ FROM amd64/golang:1.18 as builder
 # must not include a leading v(1.2.3). example: 1.2.3
 ARG VERSION
 
-WORKDIR /go/src/terraform-providers/terraform-provider-everything
+WORKDIR /go/src/terraform-providers/terraform-provider-ikea
 COPY ./go.mod ./go.mod
 COPY ./go.sum ./go.sum
 RUN go mod download
 COPY ./ ./
 
-RUN env GOOS=linux GOARCH=amd64 go build -o terraform-provider-everything_v$VERSION .
+RUN env GOOS=linux GOARCH=amd64 go build -o terraform-provider-ikea_v$VERSION .
 
 FROM hashicorp/terraform:1.2.2
 
@@ -25,6 +25,6 @@ RUN addgroup -S terraform && adduser -S terraform -G terraform
 USER terraform
 
 # copy binary to home directory
-COPY --from=builder /go/src/terraform-providers/terraform-provider-everything/terraform-provider-everything_v$VERSION /home/terraform/.terraform.d/plugins/qaware.com/terraform/everything/$VERSION/linux_amd64/terraform-provider-everything_v$VERSION
+COPY --from=builder /go/src/terraform-providers/terraform-provider-ikea/terraform-provider-ikea_v$VERSION /home/terraform/.terraform.d/plugins/qaware.com/terraform/ikea/$VERSION/linux_amd64/terraform-provider-ikea_v$VERSION
 
 ENTRYPOINT ["terraform"]

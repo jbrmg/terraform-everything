@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"terraform-provider-everything/internal/everything"
+	"terraform-provider-everything/internal/ikea"
 )
 
 func init() {
@@ -17,23 +17,24 @@ func New() func() *schema.Provider {
 	return func() *schema.Provider {
 		p := &schema.Provider{
 			ResourcesMap: map[string]*schema.Resource{
-				"everything_nothing": resourceNothing(),
+				"ikea_cabinet":    resourceCabinet(),
+				"ikea_countertop": resourceCounterTop(),
 			},
 			DataSourcesMap: map[string]*schema.Resource{
-				"everything_nothing": dataSourceNothing(),
+				"ikea_cabinet": dataSourceCabinet(),
 			},
 			Schema: map[string]*schema.Schema{
 				"username": {
 					Description: "Username for basic auth authentication",
 					Required:    true,
 					Type:        schema.TypeString,
-					DefaultFunc: schema.EnvDefaultFunc("EVERYTHING_USERNAME", nil),
+					DefaultFunc: schema.EnvDefaultFunc("IKEA_USERNAME", nil),
 				},
 				"password": {
 					Description: "Password for basic auth authentication",
 					Type:        schema.TypeString,
 					Required:    true,
-					DefaultFunc: schema.EnvDefaultFunc("EVERYTHING_PASSWORD", nil),
+					DefaultFunc: schema.EnvDefaultFunc("IKEA_PASSWORD", nil),
 				},
 			},
 		}
@@ -47,7 +48,7 @@ func providerConfigure(_ context.Context, d *schema.ResourceData) (interface{}, 
 	username := d.Get("username").(string)
 	password := d.Get("password").(string)
 
-	return &everything.ApiClient{
+	return &ikea.ApiClient{
 		Username: username,
 		Password: password,
 	}, nil

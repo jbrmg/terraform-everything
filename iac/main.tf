@@ -1,7 +1,7 @@
 terraform {
   required_providers {
-    everything = {
-      source  = "qaware.com/terraform/everything"
+    ikea = {
+      source  = "qaware.com/terraform/ikea"
       version = "0.0.1"
     }
   }
@@ -11,7 +11,7 @@ terraform {
   }
 }
 
-provider everything {
+provider ikea {
   username = "nobody"
   password = "password"
 }

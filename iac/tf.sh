@@ -12,7 +12,7 @@ while IFS= read -r line; do
     versionNumber=${split[1]//\"/}
     break
   fi
-  if [[ $line == *"qaware.com/terraform/everything"* ]]; then
+  if [[ $line == *"qaware.com/terraform/ikea"* ]]; then
     found=true
   fi
 done <main.tf
@@ -21,4 +21,4 @@ done <main.tf
 # then, set the workspace directory to the original directory.
 # mounting the parent directory into the container is necessary so that iac-modules can be referenced locally
 # as they are mounted into the container too
-docker run --rm -it -v "$(pwd)":/workspace -w /workspace qaware.com/terraform/everything:"$versionNumber" "$@"
+docker run --rm -it -v "$(pwd)":/workspace -w /workspace qaware.com/terraform/ikea:"$versionNumber" "$@"

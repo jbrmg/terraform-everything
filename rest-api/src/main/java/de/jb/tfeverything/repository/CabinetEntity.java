@@ -2,7 +2,6 @@ package de.jb.tfeverything.repository;
 
 import lombok.Data;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,15 +10,18 @@ import java.util.UUID;
 
 @Entity
 @Data
-public class NothingEntity {
+public class CabinetEntity {
+
+    public enum FrontType {
+        RINGHULT,
+        VOXTORP,
+        VEDDINGE
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
-    @Column(unique = true, nullable = false)
-    private String something;
-
-    private String anything;
+    private String color;
+    private FrontType front;
 
 }
