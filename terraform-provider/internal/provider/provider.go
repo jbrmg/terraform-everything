@@ -21,7 +21,9 @@ func New() func() *schema.Provider {
 				"ikea_cabinet":    resourceCabinet(),
 				"ikea_countertop": resourceCounterTop(),
 			},
-			DataSourcesMap: map[string]*schema.Resource{},
+			DataSourcesMap: map[string]*schema.Resource{
+				"ikea_cabinet": dataSourceCabinet(),
+			},
 			Schema: map[string]*schema.Schema{
 				"username": {
 					Description: "Username for basic auth authentication",
