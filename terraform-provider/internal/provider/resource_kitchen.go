@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceKitchen() *schema.Resource {
@@ -18,7 +19,19 @@ func resourceKitchen() *schema.Resource {
 			StateContext: schema.ImportStatePassthroughContext,
 		},
 
-		Schema: map[string]*schema.Schema{},
+		Schema: map[string]*schema.Schema{
+			"id": {
+				Description: "The identifier of this cabinet",
+				Type:        schema.TypeString,
+				Computed:    true,
+			},
+			"name": {
+				Description:  "Name of the kitchen",
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringIsNotEmpty,
+			},
+		},
 	}
 }
 
