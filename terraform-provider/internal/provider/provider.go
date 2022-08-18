@@ -16,7 +16,9 @@ func init() {
 func New() func() *schema.Provider {
 	return func() *schema.Provider {
 		p := &schema.Provider{
-			ResourcesMap:   map[string]*schema.Resource{},
+			ResourcesMap: map[string]*schema.Resource{
+				"ikea_kitchen": resourceKitchen(),
+			},
 			DataSourcesMap: map[string]*schema.Resource{},
 			Schema:         map[string]*schema.Schema{},
 		}
@@ -28,4 +30,8 @@ func New() func() *schema.Provider {
 
 func providerConfigure(_ context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
 	return &ikea.ApiClient{}, nil
+}
+
+func getClient(meta interface{}) *ikea.ApiClient {
+	return meta.(*ikea.ApiClient)
 }
