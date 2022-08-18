@@ -7,8 +7,6 @@ import (
 )
 
 type ApiClient struct {
-	Username string
-	Password string
 }
 
 const KitchensApi = "kitchens"
@@ -292,5 +290,5 @@ func (a *ApiClient) DeleteCounterTop(id string) error {
 }
 
 func (a *ApiClient) newClient() *sling.Sling {
-	return sling.New().Base("http://localhost:8080/").SetBasicAuth(a.Username, a.Password)
+	return sling.New().Base("http://localhost:8080/")
 }

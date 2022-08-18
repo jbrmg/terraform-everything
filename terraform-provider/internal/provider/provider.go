@@ -16,28 +16,9 @@ func init() {
 func New() func() *schema.Provider {
 	return func() *schema.Provider {
 		p := &schema.Provider{
-			ResourcesMap: map[string]*schema.Resource{
-				"ikea_kitchen":    resourceKitchen(),
-				"ikea_cabinet":    resourceCabinet(),
-				"ikea_countertop": resourceCounterTop(),
-			},
-			DataSourcesMap: map[string]*schema.Resource{
-				"ikea_cabinet": dataSourceCabinet(),
-			},
-			Schema: map[string]*schema.Schema{
-				"username": {
-					Description: "Username for basic auth authentication",
-					Required:    true,
-					Type:        schema.TypeString,
-					DefaultFunc: schema.EnvDefaultFunc("IKEA_USERNAME", nil),
-				},
-				"password": {
-					Description: "Password for basic auth authentication",
-					Type:        schema.TypeString,
-					Required:    true,
-					DefaultFunc: schema.EnvDefaultFunc("IKEA_PASSWORD", nil),
-				},
-			},
+			ResourcesMap:   map[string]*schema.Resource{},
+			DataSourcesMap: map[string]*schema.Resource{},
+			Schema:         map[string]*schema.Schema{},
 		}
 
 		p.ConfigureContextFunc = providerConfigure
@@ -46,11 +27,5 @@ func New() func() *schema.Provider {
 }
 
 func providerConfigure(_ context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
-	username := d.Get("username").(string)
-	password := d.Get("password").(string)
-
-	return &ikea.ApiClient{
-		Username: username,
-		Password: password,
-	}, nil
+	return &ikea.ApiClient{}, nil
 }
