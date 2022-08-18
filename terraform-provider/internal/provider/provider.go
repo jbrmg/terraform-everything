@@ -22,7 +22,20 @@ func New() func() *schema.Provider {
 				"ikea_countertop": resourceCounterTop(),
 			},
 			DataSourcesMap: map[string]*schema.Resource{},
-			Schema:         map[string]*schema.Schema{},
+			Schema: map[string]*schema.Schema{
+				"username": {
+					Description: "Username for basic auth authentication",
+					Required:    true,
+					Type:        schema.TypeString,
+					DefaultFunc: schema.EnvDefaultFunc("IKEA_USERNAME", nil),
+				},
+				"password": {
+					Description: "Password for basic auth authentication",
+					Type:        schema.TypeString,
+					Required:    true,
+					DefaultFunc: schema.EnvDefaultFunc("IKEA_PASSWORD", nil),
+				},
+			},
 		}
 
 		p.ConfigureContextFunc = providerConfigure
@@ -31,7 +44,13 @@ func New() func() *schema.Provider {
 }
 
 func providerConfigure(_ context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
-	return &ikea.ApiClient{}, nil
+	username := d.Get("username").(string)
+	password := d.Get("password").(string)
+
+	return &ikea.ApiClient{
+		Username: username,
+		Password: password,
+	}, nil
 }
 
 func getClient(meta interface{}) *ikea.ApiClient {
