@@ -2,6 +2,7 @@ package provider
 
 import (
 	"fmt"
+	"github.com/hashicorp/go-uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"regexp"
 	"terraform-provider-everything/internal/ikea"
@@ -12,6 +13,7 @@ import (
 
 var color = "#FFFFFF"
 var front = "RINGHULT"
+var kitchenId, _ = uuid.GenerateUUID()
 
 func TestAccResourceCabinet(t *testing.T) {
 	resource.UnitTest(t, resource.TestCase{
@@ -20,11 +22,11 @@ func TestAccResourceCabinet(t *testing.T) {
 		ProviderFactories: providerFactories,
 		Steps: []resource.TestStep{
 			{
-				Config:      testAccResourceCabinet("invalid!§§$%", front),
+				Config:      testAccResourceCabinet("invalid!§§$%", front, kitchenId),
 				ExpectError: regexp.MustCompile("color must be a valid hex color code"),
 			},
 			{
-				Config: testAccResourceCabinet(color, front),
+				Config: testAccResourceCabinet(color, front, kitchenId),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("ikea_cabinet.test", "color", color),
 					resource.TestCheckResourceAttr("ikea_cabinet.test", "front", front),
@@ -34,12 +36,13 @@ func TestAccResourceCabinet(t *testing.T) {
 	})
 }
 
-func testAccResourceCabinet(color string, front string) string {
+func testAccResourceCabinet(color string, front string, kitchenId string) string {
 	return fmt.Sprintf(`
 		resource "ikea_cabinet" "test" {
 		  color = "%s"
 		  front = "%s"
-		}`, color, front)
+		  kitchen_id = "%s"
+		}`, color, front, kitchenId)
 }
 
 func testAccResourceCabinetDestroy(s *terraform.State) error {

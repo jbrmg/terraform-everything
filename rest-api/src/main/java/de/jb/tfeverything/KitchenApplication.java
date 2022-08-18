@@ -2,6 +2,7 @@ package de.jb.tfeverything;
 
 import de.jb.tfeverything.repository.CabinetEntity;
 import de.jb.tfeverything.repository.CounterTopEntity;
+import de.jb.tfeverything.repository.KitchenEntity;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -17,6 +18,6 @@ public class KitchenApplication implements RepositoryRestConfigurer {
 
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
-        config.exposeIdsFor(CabinetEntity.class, CounterTopEntity.class);
+        config.exposeIdsFor(CabinetEntity.class, CounterTopEntity.class, KitchenEntity.class);
     }
 }

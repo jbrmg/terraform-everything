@@ -42,6 +42,12 @@ func resourceCabinet() *schema.Resource {
 				Required:     true,
 				ValidateFunc: validation.StringInSlice([]string{"RINGHULT", "VOXTORP", "VEDDINGE"}, false),
 			},
+			"kitchen_id": {
+				Description:  "Identifier of the kitchen this cabinet belongs to",
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.IsUUID,
+			},
 		},
 	}
 }
@@ -49,8 +55,9 @@ func resourceCabinet() *schema.Resource {
 func resourceCabinetCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	color := d.Get("color").(string)
 	front := d.Get("front").(string)
+	kitchenId := d.Get("kitchen_id").(string)
 
-	cabinet, err := getClient(meta).CreateCabinet(color, front)
+	cabinet, err := getClient(meta).CreateCabinet(color, front, kitchenId)
 
 	if err != nil {
 		return diag.Errorf("Could not create cabinet: %s", err)
@@ -87,8 +94,9 @@ func resourceCabinetUpdate(ctx context.Context, d *schema.ResourceData, meta int
 	id := d.Id()
 	color := d.Get("color").(string)
 	front := d.Get("front").(string)
+	kitchenId := d.Get("kitchen_id").(string)
 
-	cabinet, err := getClient(meta).UpdateCabinet(id, color, front)
+	cabinet, err := getClient(meta).UpdateCabinet(id, color, front, kitchenId)
 
 	if err != nil {
 		return diag.Errorf("could not update cabinet details: %s", err)

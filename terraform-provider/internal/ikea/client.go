@@ -11,20 +11,33 @@ type ApiClient struct {
 	Password string
 }
 
+const KitchensApi = "kitchens"
+const KitchenApi = KitchensApi + "/%s"
 const CabinetsApi = "cabinets"
 const CabinetApi = CabinetsApi + "/%s"
 const CounterTopsApi = "countertops"
 const CounterTopApi = CounterTopsApi + "/%s"
 
+type Kitchen struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+}
+
+type kitchenRequest struct {
+	Name string `json:"name"`
+}
+
 type Cabinet struct {
-	Id    string `json:"id"`
-	Front string `json:"front"`
-	Color string `json:"color"`
+	Id        string `json:"id"`
+	Front     string `json:"front"`
+	Color     string `json:"color"`
+	KitchenId string `json:"kitchenId"`
 }
 
 type cabinetRequest struct {
-	Front string `json:"front"`
-	Color string `json:"color"`
+	Front     string `json:"front"`
+	Color     string `json:"color"`
+	KitchenId string `json:"kitchenId"`
 }
 
 type CounterTop struct {
@@ -38,8 +51,88 @@ type counterTopRequest struct {
 	CabinetIds []string `json:"cabinetIds"`
 }
 
-func (a *ApiClient) CreateCabinet(color string, front string) (*Cabinet, error) {
-	requestBody := cabinetRequest{Color: color, Front: front}
+func (a *ApiClient) CreateKitchen(name string) (*Kitchen, error) {
+	requestBody := kitchenRequest{Name: name}
+
+	kitchen := new(Kitchen)
+	resp, err := a.newClient().
+		Post(KitchensApi).
+		BodyJSON(requestBody).
+		Add("Accept", "application/json").
+		ReceiveSuccess(kitchen)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.StatusCode != 201 {
+		return nil, fmt.Errorf("got invalid response code: %d", resp.StatusCode)
+	}
+
+	return kitchen, nil
+}
+
+func (a *ApiClient) GetKitchen(id string) (*Kitchen, error) {
+	kitchen := new(Kitchen)
+	resp, err := a.newClient().
+		Get(fmt.Sprintf(KitchenApi, id)).
+		Add("Accept", "application/json").
+		ReceiveSuccess(kitchen)
+
+	if err != nil {
+		return nil, errors.New(fmt.Sprintf("could not kitchen details. %#v", err))
+	}
+
+	if resp.StatusCode == 404 {
+		return nil, nil
+	}
+
+	if resp.StatusCode != 200 {
+		return nil, fmt.Errorf("got invalid response code: %d", resp.StatusCode)
+	}
+
+	return kitchen, nil
+}
+
+func (a *ApiClient) UpdateKitchen(id string, name string) (*Kitchen, error) {
+	requestBody := kitchenRequest{Name: name}
+
+	kitchen := new(Kitchen)
+	resp, err := a.newClient().
+		Put(fmt.Sprintf(KitchenApi, id)).
+		BodyJSON(requestBody).
+		Add("Accept", "application/json").
+		ReceiveSuccess(kitchen)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.StatusCode != 200 {
+		return nil, fmt.Errorf("got invalid response code: %d", resp.StatusCode)
+	}
+
+	return kitchen, nil
+}
+
+func (a *ApiClient) DeleteKitchen(id string) error {
+	resp, err := a.newClient().
+		Delete(fmt.Sprintf(KitchenApi, id)).
+		ReceiveSuccess(nil)
+
+	if err != nil {
+		return err
+	}
+
+	if resp.StatusCode != 204 {
+		return fmt.Errorf("got invalid response code: %d", resp.StatusCode)
+	}
+
+	return nil
+}
+
+func (a *ApiClient) CreateCabinet(color string, front string, kitchenId string) (*Cabinet, error) {
+	requestBody := cabinetRequest{Color: color, Front: front, KitchenId: kitchenId}
 
 	cabinet := new(Cabinet)
 	resp, err := a.newClient().
@@ -81,8 +174,8 @@ func (a *ApiClient) GetCabinet(id string) (*Cabinet, error) {
 	return cabinet, nil
 }
 
-func (a *ApiClient) UpdateCabinet(id string, color string, front string) (*Cabinet, error) {
-	requestBody := cabinetRequest{Color: color, Front: front}
+func (a *ApiClient) UpdateCabinet(id string, color string, front string, kitchenId string) (*Cabinet, error) {
+	requestBody := cabinetRequest{Color: color, Front: front, KitchenId: kitchenId}
 
 	cabinet := new(Cabinet)
 	resp, err := a.newClient().
