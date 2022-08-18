@@ -17,7 +17,9 @@ func New() func() *schema.Provider {
 	return func() *schema.Provider {
 		p := &schema.Provider{
 			ResourcesMap: map[string]*schema.Resource{
-				"ikea_kitchen": resourceKitchen(),
+				"ikea_kitchen":    resourceKitchen(),
+				"ikea_cabinet":    resourceCabinet(),
+				"ikea_countertop": resourceCounterTop(),
 			},
 			DataSourcesMap: map[string]*schema.Resource{},
 			Schema:         map[string]*schema.Schema{},

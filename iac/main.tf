@@ -12,6 +12,4 @@ terraform {
 }
 
 provider ikea {
-  username = "nobody"
-  password = "password"
 }
