@@ -1,0 +1,2 @@
+GET http://localhost:8080/render/5626eda7-5c54-4e42-9586-a278c8222ed6
+Authorization: Basic {{username}} {{password}}
